@@ -34,8 +34,11 @@ export function ListPage({ onChangePage, user, setPessoa }) {
     const historyDoUser = history.filter(e => e.from === user || e.to === user);
 
     // Array de nomes de pessoas que já falaram com o user
-    const pessoasQueFalaramComOUser = [...new Set(historyDoUser.map(e => e.from).concat(historyDoUser.map(e => e.to)))];
-  
+    let pessoasQueFalaramComOUser = [...new Set(historyDoUser.map(e => e.from).concat(historyDoUser.map(e => e.to)))];
+    
+    // Remova o próprio usuário do array
+    pessoasQueFalaramComOUser = pessoasQueFalaramComOUser.filter(pessoa => pessoa !== user);
+
     // Função que define o 'pessoa' (para a ChatPage) e que muda de página para a ChatPage
     const handleConversa = (e) => {
         setPessoa(e);
@@ -55,10 +58,20 @@ export function ListPage({ onChangePage, user, setPessoa }) {
       <ul className="flex flex-col">
         {pessoasQueFalaramComOUser.map((e, index) => (
           <li key={index}>
-            <button onClick={() => handleConversa(e)} className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-xl mb-2 w-full">{/*Largura fixa*/}{e}</button>
+            <div onClick={() => handleConversa(e)} className="flex bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-xl mb-2 w-full">
+              <img src={ e === "Rafael" ? RafaelImg : e === "Francisco" ? FranciscoImg : e === "Andrezza" ? AndrezzaImg : e === "Marta" ? MartaImg : e === "Sofia" ? SofiaImg : DefaultImg } alt={e} className="h-8 w-8 rounded-full mr-2"/>
+              <button className="">{e}</button>
+            </div>
           </li>
         ))}
       </ul>
+
+      {/* <div key={index} className={`flex ${message.from === user ? 'justify-end' : 'justify-start'} mb-2`}>
+          <img src={ message.from === "Rafael" ? RafaelImg : message.from === "Francisco" ? FranciscoImg : message.from === "Andrezza" ? AndrezzaImg : message.from === "Marta" ? MartaImg : message.from === "Sofia" ? SofiaImg : DefaultImg } alt={message.from} className="h-8 w-8 rounded-full mr-2"/>
+          <div className={`p-3 rounded-xl font-bold shadow-md ${message.from === user ? 'bg-green-500 text-white ms-10 rounded-br-none' : 'bg-gray-200 text-gray-800 me-10 rounded-tl-none'}`}>
+              {message.content}
+          </div>
+      </div> */}
 
       {/* Back Button */}
       <div className="fixed top-5 left-3">
